@@ -4,139 +4,119 @@
 
 <head>
 
-    <meta charset="UTF-8">
+ <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Aplikasi Absensi Siswa</title>
+ <title>Aplikasi Absensi Siswa</title>
 
-    
+ 
 
-    <!-- Tailwind CSS -->
+ <!-- Tailwind CSS -->
 
-    <link href="./dist/output.css" rel="stylesheet">
+ <link href="./dist/output.css" rel="stylesheet">
 
-    
+ 
 
-    <!-- Html5Qrcode for QR Code Scanning -->
+ <!-- Html5Qrcode for QR Code Scanning -->
 
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+ <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 
 
-    <!-- SheetJS (xlsx) for Excel/CSV parsing -->
+ <!-- SheetJS (xlsx) for Excel/CSV parsing -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    
+ 
 
-    <!-- Tone.js for sound effects -->
+ <!-- Tone.js for sound effects -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
 
 
 
-    <!-- qrcode-generator for QR Code Creation -->
+ <!-- qrcode-generator for QR Code Creation -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
 
 
-    <!-- Font Awesome for Icons -->
+ <!-- Font Awesome for Icons -->
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
 
-    <style>
+ <style>
 
-        /* Custom styles for a cleaner look */
+  /* Custom styles for a cleaner look */
 
-        body {
+  body { font-family: 'Inter', sans-serif;}
 
-            font-family: 'Inter', sans-serif;
+  .tab-button {transition: all 0.3s ease;
+}
 
-        }
+  .tab-button.active {border-color: #3b82f6; background-color: #3b82f6; color: white;}
 
-        .tab-button {
+  /* Styling for the Html5Qrcode reader */
 
-            transition: all 0.3s ease;
+  #qr-reader {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    border: none;
+}
 
-        }
+  #qr-reader_dashboard_section_csr > div > button {
 
-        .tab-button.active {
+   background-color: #3b82f6 !important;
 
-            border-color: #3b82f6;
+   color: white !important;
 
-            background-color: #3b82f6;
+  }
 
-            color: white;
 
-        }
 
-        /* Styling for the Html5Qrcode reader */
+  /* Styles for printing QR Code */
 
-        #qr-reader {
+  @media print {
 
-            width: 100%;
+   body * {
 
-            max-width: 500px;
+    visibility: hidden;
 
-            margin: auto;
+   }
 
-            border: none;
+   #qr-modal-printable, #qr-modal-printable * {
 
-        }
+    visibility: visible;
 
-        #qr-reader_dashboard_section_csr > div > button {
+   }
 
-            background-color: #3b82f6 !important;
+   #qr-modal-printable .non-printable {
 
-            color: white !important;
+    visibility: hidden;
 
-        }
+   }
 
+   #qr-modal-printable {
 
+    position: absolute;
 
-        /* Styles for printing QR Code */
+    left: 50%;
 
-        @media print {
+    top: 50%;
 
-            body * {
+    transform: translate(-50%, -50%);
 
-                visibility: hidden;
+    width: 100%;
 
-            }
+   }
 
-            #qr-modal-printable, #qr-modal-printable * {
+  }
 
-                visibility: visible;
-
-            }
-
-            #qr-modal-printable .non-printable {
-
-                visibility: hidden;
-
-            }
-
-            #qr-modal-printable {
-
-                position: absolute;
-
-                left: 50%;
-
-                top: 50%;
-
-                transform: translate(-50%, -50%);
-
-                width: 100%;
-
-            }
-
-        }
-
-    </style>
+ </style>
 
 </head>
 
@@ -144,1151 +124,1151 @@
 
 
 
-    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+ <div class="container mx-auto p-4 md:p-6 lg:p-8">
 
-        <header class="text-center mb-6">
+  <header class="text-center mb-6">
 
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-700">Aplikasi Absensi Siswa</h1>
+   <h1 class="text-3xl md:text-4xl font-bold text-gray-700">Aplikasi Absensi Siswa</h1>
 
-            <p class="text-gray-500 mt-1">Manajemen data dan absensi dengan scan QR Code</p>
+   <p class="text-gray-500 mt-1">Manajemen data dan absensi dengan scan QR Code</p>
 
-        </header>
+  </header>
 
 
 
-        <!-- Tab Navigation -->
+  <!-- Tab Navigation -->
 
-        <div class="mb-6 flex justify-center border-b border-gray-200">
+  <div class="mb-6 flex justify-center border-b border-gray-200">
 
-            <button id="tab-manajemen" class="tab-button py-3 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200">
+   <button id="tab-manajemen" class="tab-button py-3 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200">
 
-                <i class="fas fa-users-cog mr-2"></i>Manajemen Siswa
+    <i class="fas fa-users-cog mr-2"></i>Manajemen Siswa
 
-            </button>
+   </button>
 
-            <button id="tab-scan" class="tab-button py-3 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200">
+   <button id="tab-scan" class="tab-button py-3 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200">
 
-                <i class="fas fa-qrcode mr-2"></i>Scan Absensi
+    <i class="fas fa-qrcode mr-2"></i>Scan Absensi
 
-            </button>
+   </button>
 
-            <button id="tab-rekap" class="tab-button py-3 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200">
+   <button id="tab-rekap" class="tab-button py-3 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200">
 
-                <i class="fas fa-chart-bar mr-2"></i>Rekapitulasi
+    <i class="fas fa-chart-bar mr-2"></i>Rekapitulasi
 
-            </button>
+   </button>
 
-        </div>
+  </div>
 
 
 
-        <!-- Main Content -->
+  <!-- Main Content -->
 
-        <main>
+  <main>
 
-            <!-- Manajemen Siswa View -->
+   <!-- Manajemen Siswa View -->
 
-            <div id="view-manajemen">
+   <div id="view-manajemen">
 
-                <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-white p-6 rounded-lg shadow-md">
 
-                    <h2 class="text-2xl font-bold mb-4">Data Induk Siswa</h2>
+     <h2 class="text-2xl font-bold mb-4">Data Induk Siswa</h2>
 
-                    
+     
 
-                    <div class="flex flex-wrap gap-3 mb-4">
+     <div class="flex flex-wrap gap-3 mb-4">
 
-                        <button id="btn-add-student" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow"><i class="fas fa-plus mr-2"></i>Tambah Siswa</button>
+      <button id="btn-add-student" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow"><i class="fas fa-plus mr-2"></i>Tambah Siswa</button>
 
-                        <label for="upload-input" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow cursor-pointer"><i class="fas fa-file-upload mr-2"></i>Upload Massal</label>
+      <label for="upload-input" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow cursor-pointer"><i class="fas fa-file-upload mr-2"></i>Upload Massal</label>
 
-                        <input type="file" id="upload-input" class="hidden" accept=".xlsx, .csv">
+      <input type="file" id="upload-input" class="hidden" accept=".xlsx, .csv">
 
-                        <button id="btn-download-template" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow"><i class="fas fa-file-download mr-2"></i>Download Template</button>
+      <button id="btn-download-template" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow"><i class="fas fa-file-download mr-2"></i>Download Template</button>
 
-                    </div>
+     </div>
 
 
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 
-                        <input type="text" id="search-input" placeholder="Cari berdasarkan NIS atau Nama..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <input type="text" id="search-input" placeholder="Cari berdasarkan NIS atau Nama..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-                        <select id="filter-kelas" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
+      <select id="filter-kelas" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
 
-                    </div>
+     </div>
 
 
 
-                    <div class="overflow-x-auto">
+     <div class="overflow-x-auto">
 
-                        <table class="min-w-full bg-white">
+      <table class="min-w-full bg-white">
 
-                            <thead class="bg-gray-200">
+       <thead class="bg-gray-200">
 
-                                <tr>
+        <tr>
 
-                                    <th class="py-3 px-4 text-left">No.</th>
+         <th class="py-3 px-4 text-left">No.</th>
 
-                                    <th class="py-3 px-4 text-left cursor-pointer" data-sort="nis">NIS <i class="fas fa-sort"></i></th>
+         <th class="py-3 px-4 text-left cursor-pointer" data-sort="nis">NIS <i class="fas fa-sort"></i></th>
 
-                                    <th class="py-3 px-4 text-left cursor-pointer" data-sort="nama">Nama Lengkap <i class="fas fa-sort"></i></th>
+         <th class="py-3 px-4 text-left cursor-pointer" data-sort="nama">Nama Lengkap <i class="fas fa-sort"></i></th>
 
-                                    <th class="py-3 px-4 text-left cursor-pointer" data-sort="kelas">Kelas <i class="fas fa-sort"></i></th>
+         <th class="py-3 px-4 text-left cursor-pointer" data-sort="kelas">Kelas <i class="fas fa-sort"></i></th>
 
-                                    <th class="py-3 px-4 text-left">Aksi</th>
+         <th class="py-3 px-4 text-left">Aksi</th>
 
-                                </tr>
+        </tr>
 
-                            </thead>
+       </thead>
 
-                            <tbody id="student-table-body"></tbody>
+       <tbody id="student-table-body"></tbody>
 
-                        </table>
+      </table>
 
-                    </div>
+     </div>
 
-                </div>
+    </div>
 
-            </div>
+   </div>
 
 
 
-            <!-- Scan Absensi View -->
+   <!-- Scan Absensi View -->
 
-            <div id="view-scan" class="hidden">
+   <div id="view-scan" class="hidden">
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                    <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+     <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
 
-                        <h2 class="text-2xl font-bold mb-4 text-center">Arahkan QR Code ke Kamera</h2>
+      <h2 class="text-2xl font-bold mb-4 text-center">Arahkan QR Code ke Kamera</h2>
 
-                        <div id="qr-reader" class="w-full"></div>
+      <div id="qr-reader" class="w-full"></div>
 
-                        <div id="scan-notification" class="mt-4 text-center font-bold text-xl p-4 rounded-lg hidden"></div>
+      <div id="scan-notification" class="mt-4 text-center font-bold text-xl p-4 rounded-lg hidden"></div>
 
-                    </div>
+     </div>
 
-                    <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
+     <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
 
-                        <h2 class="text-2xl font-bold mb-4">Sudah Absen Hari Ini</h2>
+      <h2 class="text-2xl font-bold mb-4">Sudah Absen Hari Ini</h2>
 
-                        <ul id="attendance-list" class="space-y-2 max-h-96 overflow-y-auto"></ul>
+      <ul id="attendance-list" class="space-y-2 max-h-96 overflow-y-auto"></ul>
 
-                    </div>
+     </div>
 
-                </div>
+    </div>
 
-            </div>
+   </div>
 
-            
+   
 
-            <!-- Rekapitulasi View -->
+   <!-- Rekapitulasi View -->
 
-            <div id="view-rekap" class="hidden">
+   <div id="view-rekap" class="hidden">
 
-                 <div class="bg-white p-6 rounded-lg shadow-md">
+     <div class="bg-white p-6 rounded-lg shadow-md">
 
-                    <h2 class="text-2xl font-bold mb-4">Rekapitulasi Absensi</h2>
+     <h2 class="text-2xl font-bold mb-4">Rekapitulasi Absensi</h2>
 
-                     <div class="overflow-x-auto">
+      <div class="overflow-x-auto">
 
-                        <table class="min-w-full bg-white">
+      <table class="min-w-full bg-white">
 
-                            <thead class="bg-gray-200">
+       <thead class="bg-gray-200">
 
-                                <tr>
+        <tr>
 
-                                    <th class="py-3 px-4 text-left">No.</th>
+         <th class="py-3 px-4 text-left">No.</th>
 
-                                    <th class="py-3 px-4 text-left">NIS</th>
+         <th class="py-3 px-4 text-left">NIS</th>
 
-                                    <th class="py-3 px-4 text-left">Nama Lengkap</th>
+         <th class="py-3 px-4 text-left">Nama Lengkap</th>
 
-                                    <th class="py-3 px-4 text-left">Kelas</th>
+         <th class="py-3 px-4 text-left">Kelas</th>
 
-                                    <th class="py-3 px-4 text-left">Tanggal</th>
+         <th class="py-3 px-4 text-left">Tanggal</th>
 
-                                    <th class="py-3 px-4 text-left">Jam Masuk</th>
+         <th class="py-3 px-4 text-left">Jam Masuk</th>
 
-                                    <th class="py-3 px-4 text-left">Keterangan</th>
+         <th class="py-3 px-4 text-left">Keterangan</th>
 
-                                    <th class="py-3 px-4 text-left">Poin</th>
+         <th class="py-3 px-4 text-left">Poin</th>
 
-                                </tr>
+        </tr>
 
-                            </thead>
+       </thead>
 
-                            <tbody id="rekap-table-body"></tbody>
+       <tbody id="rekap-table-body"></tbody>
 
-                        </table>
+      </table>
 
-                    </div>
+     </div>
 
-                </div>
+    </div>
 
-            </div>
+   </div>
 
-        </main>
+  </main>
 
-    </div>
+ </div>
 
 
 
-    <!-- Modal for Add/Edit Student -->
+ <!-- Modal for Add/Edit Student -->
 
-    <div id="student-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+ <div id="student-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
 
-        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+  <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
 
-            <h2 id="modal-title" class="text-2xl font-bold mb-6">Tambah Siswa Baru</h2>
+   <h2 id="modal-title" class="text-2xl font-bold mb-6">Tambah Siswa Baru</h2>
 
-            <form id="student-form">
+   <form id="student-form">
 
-                <input type="hidden" id="modal-student-id">
+    <input type="hidden" id="modal-student-id">
 
-                <div class="mb-4">
+    <div class="mb-4">
 
-                    <label for="nis-input" class="block text-gray-700 font-semibold mb-2">NIS</label>
+     <label for="nis-input" class="block text-gray-700 font-semibold mb-2">NIS</label>
 
-                    <input type="text" id="nis-input" class="w-full p-2 border border-gray-300 rounded-lg" required>
+     <input type="text" id="nis-input" class="w-full p-2 border border-gray-300 rounded-lg" required>
 
-                </div>
+    </div>
 
-                <div class="mb-4">
+    <div class="mb-4">
 
-                    <label for="nama-input" class="block text-gray-700 font-semibold mb-2">Nama Lengkap</label>
+     <label for="nama-input" class="block text-gray-700 font-semibold mb-2">Nama Lengkap</label>
 
-                    <input type="text" id="nama-input" class="w-full p-2 border border-gray-300 rounded-lg" required>
+     <input type="text" id="nama-input" class="w-full p-2 border border-gray-300 rounded-lg" required>
 
-                </div>
+    </div>
 
-                <div class="mb-6">
+    <div class="mb-6">
 
-                    <label for="kelas-input" class="block text-gray-700 font-semibold mb-2">Kelas</label>
+     <label for="kelas-input" class="block text-gray-700 font-semibold mb-2">Kelas</label>
 
-                    <input type="text" id="kelas-input" class="w-full p-2 border border-gray-300 rounded-lg" required>
+     <input type="text" id="kelas-input" class="w-full p-2 border border-gray-300 rounded-lg" required>
 
-                </div>
+    </div>
 
-                <div class="flex justify-end gap-4">
+    <div class="flex justify-end gap-4">
 
-                    <button type="button" id="btn-cancel-modal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg">Batal</button>
+     <button type="button" id="btn-cancel-modal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg">Batal</button>
 
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Simpan</button>
+     <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Simpan</button>
 
-                </div>
+    </div>
 
-            </form>
+   </form>
 
-        </div>
+  </div>
 
-    </div>
+ </div>
 
 
 
-    <!-- Modal for QR Code -->
+ <!-- Modal for QR Code -->
 
-    <div id="qr-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+ <div id="qr-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
 
-        <div id="qr-modal-printable" class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm text-center">
+  <div id="qr-modal-printable" class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm text-center">
 
-            <h2 class="text-2xl font-bold mb-2">QR Code Absensi</h2>
+   <h2 class="text-2xl font-bold mb-2">QR Code Absensi</h2>
 
-            <p id="qr-student-info" class="mb-4 text-gray-600"></p>
+   <p id="qr-student-info" class="mb-4 text-gray-600"></p>
 
-            <div id="qrcode-container" class="flex justify-center mb-6"></div>
+   <div id="qrcode-container" class="flex justify-center mb-6"></div>
 
-            <div class="flex justify-center gap-4 non-printable">
+   <div class="flex justify-center gap-4 non-printable">
 
-                <button type="button" id="btn-close-qr-modal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg">Tutup</button>
+    <button type="button" id="btn-close-qr-modal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg">Tutup</button>
 
-                <button type="button" id="btn-print-qr" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"><i class="fas fa-print mr-2"></i>Cetak</button>
+    <button type="button" id="btn-print-qr" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"><i class="fas fa-print mr-2"></i>Cetak</button>
 
-            </div>
+   </div>
 
-        </div>
+  </div>
 
-    </div>
+ </div>
 
-    
+ 
 
-    <script>
+ <script>
 
-    document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
 
-        // DOM Elements
+  // DOM Elements
 
-        const tabManajemen = document.getElementById('tab-manajemen');
+  const tabManajemen = document.getElementById('tab-manajemen');
 
-        const tabScan = document.getElementById('tab-scan');
+  const tabScan = document.getElementById('tab-scan');
 
-        const tabRekap = document.getElementById('tab-rekap');
+  const tabRekap = document.getElementById('tab-rekap');
 
-        const viewManajemen = document.getElementById('view-manajemen');
+  const viewManajemen = document.getElementById('view-manajemen');
 
-        const viewScan = document.getElementById('view-scan');
+  const viewScan = document.getElementById('view-scan');
 
-        const viewRekap = document.getElementById('view-rekap');
+  const viewRekap = document.getElementById('view-rekap');
 
-        const studentTableBody = document.getElementById('student-table-body');
+  const studentTableBody = document.getElementById('student-table-body');
 
-        const searchInput = document.getElementById('search-input');
+  const searchInput = document.getElementById('search-input');
 
-        const filterKelas = document.getElementById('filter-kelas');
+  const filterKelas = document.getElementById('filter-kelas');
 
-        const btnAddStudent = document.getElementById('btn-add-student');
+  const btnAddStudent = document.getElementById('btn-add-student');
 
-        const studentModal = document.getElementById('student-modal');
+  const studentModal = document.getElementById('student-modal');
 
-        const studentForm = document.getElementById('student-form');
+  const studentForm = document.getElementById('student-form');
 
-        const btnCancelModal = document.getElementById('btn-cancel-modal');
+  const btnCancelModal = document.getElementById('btn-cancel-modal');
 
-        const modalTitle = document.getElementById('modal-title');
+  const modalTitle = document.getElementById('modal-title');
 
-        const modalStudentId = document.getElementById('modal-student-id');
+  const modalStudentId = document.getElementById('modal-student-id');
 
-        const nisInput = document.getElementById('nis-input');
+  const nisInput = document.getElementById('nis-input');
 
-        const namaInput = document.getElementById('nama-input');
+  const namaInput = document.getElementById('nama-input');
 
-        const kelasInput = document.getElementById('kelas-input');
+  const kelasInput = document.getElementById('kelas-input');
 
-        const uploadInput = document.getElementById('upload-input');
+  const uploadInput = document.getElementById('upload-input');
 
-        const btnDownloadTemplate = document.getElementById('btn-download-template');
+  const btnDownloadTemplate = document.getElementById('btn-download-template');
 
-        const rekapTableBody = document.getElementById('rekap-table-body');
+  const rekapTableBody = document.getElementById('rekap-table-body');
 
 
 
-        // Scanner elements
+  // Scanner elements
 
-        const qrReaderElement = document.getElementById('qr-reader');
+  const qrReaderElement = document.getElementById('qr-reader');
 
-        const scanNotification = document.getElementById('scan-notification');
+  const scanNotification = document.getElementById('scan-notification');
 
-        const attendanceList = document.getElementById('attendance-list');
+  const attendanceList = document.getElementById('attendance-list');
 
-        let html5QrCode;
+  let html5QrCode;
 
-        let scanActive = false;
+  let scanActive = false;
 
 
 
-        // QR Code Modal elements
+  // QR Code Modal elements
 
-        const qrModal = document.getElementById('qr-modal');
+  const qrModal = document.getElementById('qr-modal');
 
-        const qrStudentInfo = document.getElementById('qr-student-info');
+  const qrStudentInfo = document.getElementById('qr-student-info');
 
-        const qrcodeContainer = document.getElementById('qrcode-container');
+  const qrcodeContainer = document.getElementById('qrcode-container');
 
-        const btnCloseQrModal = document.getElementById('btn-close-qr-modal');
+  const btnCloseQrModal = document.getElementById('btn-close-qr-modal');
 
-        const btnPrintQr = document.getElementById('btn-print-qr');
+  const btnPrintQr = document.getElementById('btn-print-qr');
 
 
 
-        // App State
+  // App State
 
-        let students = [];
+  let students = [];
 
-        let attendance = [];
+  let attendance = [];
 
-        let sortConfig = { key: 'nama', direction: 'ascending' };
+  let sortConfig = { key: 'nama', direction: 'ascending' };
 
 
 
-        // --- Sound Effects ---
+  // --- Sound Effects ---
 
-        const synth = new Tone.Synth().toDestination();
+  const synth = new Tone.Synth().toDestination();
 
-        const playSound = (type) => {
+  const playSound = (type) => {
 
-            Tone.start();
+   Tone.start();
 
-            if (type === 'success') synth.triggerAttackRelease("C5", "8n", Tone.now());
+   if (type === 'success') synth.triggerAttackRelease("C5", "8n", Tone.now());
 
-            else if (type === 'error') synth.triggerAttackRelease("G2", "8n", Tone.now());
+   else if (type === 'error') synth.triggerAttackRelease("G2", "8n", Tone.now());
 
-            else if (type === 'warning') synth.triggerAttackRelease("E4", "8n", Tone.now());
+   else if (type === 'warning') synth.triggerAttackRelease("E4", "8n", Tone.now());
 
-        };
+  };
 
 
 
-        // --- Data Persistence ---
+  // --- Data Persistence ---
 
-        const saveData = () => {
+  const saveData = () => {
 
-            localStorage.setItem('students', JSON.stringify(students));
+   localStorage.setItem('students', JSON.stringify(students));
 
-            localStorage.setItem('attendance', JSON.stringify(attendance));
+   localStorage.setItem('attendance', JSON.stringify(attendance));
 
-        };
+  };
 
 
 
-        const loadData = () => {
+  const loadData = () => {
 
-            students = JSON.parse(localStorage.getItem('students') || '[]');
+   students = JSON.parse(localStorage.getItem('students') || '[]');
 
-            attendance = JSON.parse(localStorage.getItem('attendance') || '[]');
+   attendance = JSON.parse(localStorage.getItem('attendance') || '[]');
 
-        };
+  };
 
 
 
-        // --- UI Rendering ---
+  // --- UI Rendering ---
 
-        const populateClassFilter = () => {
+  const populateClassFilter = () => {
 
-            const uniqueClasses = [...new Set(students.map(s => s.kelas))].sort();
+   const uniqueClasses = [...new Set(students.map(s => s.kelas))].sort();
 
-            filterKelas.innerHTML = '<option value="">Semua Kelas</option>';
+   filterKelas.innerHTML = '<option value="">Semua Kelas</option>';
 
-            uniqueClasses.forEach(kelas => {
+   uniqueClasses.forEach(kelas => {
 
-                const option = document.createElement('option');
+    const option = document.createElement('option');
 
-                option.value = kelas;
+    option.value = kelas;
 
-                option.textContent = kelas;
+    option.textContent = kelas;
 
-                filterKelas.appendChild(option);
+    filterKelas.appendChild(option);
 
-            });
+   });
 
-        };
+  };
 
 
 
-        const renderStudents = () => {
+  const renderStudents = () => {
 
-            studentTableBody.innerHTML = '';
+   studentTableBody.innerHTML = '';
 
-            
+   
 
-            const searchTerm = searchInput.value.toLowerCase();
+   const searchTerm = searchInput.value.toLowerCase();
 
-            const selectedKelas = filterKelas.value;
+   const selectedKelas = filterKelas.value;
 
 
 
-            let filteredStudents = students
+   let filteredStudents = students
 
-                .filter(s => !selectedKelas || s.kelas === selectedKelas)
+    .filter(s => !selectedKelas || s.kelas === selectedKelas)
 
-                .filter(s => s.nis.toLowerCase().includes(searchTerm) || s.nama.toLowerCase().includes(searchTerm));
+    .filter(s => s.nis.toLowerCase().includes(searchTerm) || s.nama.toLowerCase().includes(searchTerm));
 
 
 
-            filteredStudents.sort((a, b) => {
+   filteredStudents.sort((a, b) => {
 
-                if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'ascending' ? -1 : 1;
+    if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'ascending' ? -1 : 1;
 
-                if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'ascending' ? 1 : -1;
+    if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'ascending' ? 1 : -1;
 
-                return 0;
+    return 0;
 
-            });
+   });
 
 
 
-            if (filteredStudents.length === 0) {
+   if (filteredStudents.length === 0) {
 
-                studentTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-500">Tidak ada data siswa.</td></tr>`;
+    studentTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-500">Tidak ada data siswa.</td></tr>`;
 
-                return;
+    return;
 
-            }
+   }
 
 
 
-            filteredStudents.forEach((student, index) => {
+   filteredStudents.forEach((student, index) => {
 
-                const tr = document.createElement('tr');
+    const tr = document.createElement('tr');
 
-                tr.className = 'border-b hover:bg-gray-50';
+    tr.className = 'border-b hover:bg-gray-50';
 
-                tr.innerHTML = `
+    tr.innerHTML = `
 
-                    <td class="py-3 px-4">${index + 1}</td>
+     <td class="py-3 px-4">${index + 1}</td>
 
-                    <td class="py-3 px-4">${student.nis}</td>
+     <td class="py-3 px-4">${student.nis}</td>
 
-                    <td class="py-3 px-4">${student.nama}</td>
+     <td class="py-3 px-4">${student.nama}</td>
 
-                    <td class="py-3 px-4">${student.kelas}</td>
+     <td class="py-3 px-4">${student.kelas}</td>
 
-                    <td class="py-3 px-4 whitespace-nowrap">
+     <td class="py-3 px-4 whitespace-nowrap">
 
-                        <button class="btn-qr text-green-500 hover:text-green-700 mr-2" data-nis="${student.nis}" title="Buat QR Code"><i class="fas fa-qrcode"></i></button>
+      <button class="btn-qr text-green-500 hover:text-green-700 mr-2" data-nis="${student.nis}" title="Buat QR Code"><i class="fas fa-qrcode"></i></button>
 
-                        <button class="btn-edit text-blue-500 hover:text-blue-700 mr-2" data-nis="${student.nis}" title="Edit Data"><i class="fas fa-edit"></i></button>
+      <button class="btn-edit text-blue-500 hover:text-blue-700 mr-2" data-nis="${student.nis}" title="Edit Data"><i class="fas fa-edit"></i></button>
 
-                        <button class="btn-delete text-red-500 hover:text-red-700" data-nis="${student.nis}" title="Hapus Siswa"><i class="fas fa-trash"></i></button>
+      <button class="btn-delete text-red-500 hover:text-red-700" data-nis="${student.nis}" title="Hapus Siswa"><i class="fas fa-trash"></i></button>
 
-                    </td>
+     </td>
 
-                `;
+    `;
 
-                studentTableBody.appendChild(tr);
+    studentTableBody.appendChild(tr);
 
-            });
+   });
 
-        };
+  };
 
 
 
-        const renderTodaysAttendance = () => {
+  const renderTodaysAttendance = () => {
 
-            attendanceList.innerHTML = '';
+   attendanceList.innerHTML = '';
 
-            const today = new Date().toDateString();
+   const today = new Date().toDateString();
 
-            const todaysAttendance = attendance.filter(record => new Date(record.timestamp).toDateString() === today);
+   const todaysAttendance = attendance.filter(record => new Date(record.timestamp).toDateString() === today);
 
 
 
-             if (todaysAttendance.length === 0) {
+    if (todaysAttendance.length === 0) {
 
-                attendanceList.innerHTML = `<li class="text-center text-gray-500">Belum ada yang absen.</li>`;
+    attendanceList.innerHTML = `<li class="text-center text-gray-500">Belum ada yang absen.</li>`;
 
-                return;
+    return;
 
-            }
+   }
 
-            const sortedAttendance = [...todaysAttendance].reverse();
+   const sortedAttendance = [...todaysAttendance].reverse();
 
-            sortedAttendance.forEach(record => {
+   sortedAttendance.forEach(record => {
 
-                const student = students.find(s => s.nis === record.nis);
+    const student = students.find(s => s.nis === record.nis);
 
-                if (student) {
+    if (student) {
 
-                    const li = document.createElement('li');
+     const li = document.createElement('li');
 
-                    li.className = `p-2 rounded-md flex justify-between items-center ${record.poin > 0 ? 'bg-red-100' : 'bg-green-100'}`;
+     li.className = `p-2 rounded-md flex justify-between items-center ${record.poin > 0 ? 'bg-red-100' : 'bg-green-100'}`;
 
-                    li.innerHTML = `
+     li.innerHTML = `
 
-                        <span>
+      <span>
 
-                            <strong class="${record.poin > 0 ? 'text-red-800' : 'text-green-800'}">${student.nama}</strong>
+       <strong class="${record.poin > 0 ? 'text-red-800' : 'text-green-800'}">${student.nama}</strong>
 
-                            <span class="text-sm text-gray-600">(${student.kelas})</span>
+       <span class="text-sm text-gray-600">(${student.kelas})</span>
 
-                        </span>
+      </span>
 
-                        <span class="text-xs text-gray-500">${new Date(record.timestamp).toLocaleTimeString('id-ID')}</span>
+      <span class="text-xs text-gray-500">${new Date(record.timestamp).toLocaleTimeString('id-ID')}</span>
 
-                    `;
+     `;
 
-                    attendanceList.appendChild(li);
+     attendanceList.appendChild(li);
 
-                }
+    }
 
-            });
+   });
 
-        };
+  };
 
 
 
-        const renderRekap = () => {
+  const renderRekap = () => {
 
-            rekapTableBody.innerHTML = '';
+   rekapTableBody.innerHTML = '';
 
-            if(attendance.length === 0) {
+   if(attendance.length === 0) {
 
-                rekapTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-gray-500">Belum ada riwayat absensi.</td></tr>`;
+    rekapTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-gray-500">Belum ada riwayat absensi.</td></tr>`;
 
-                return;
+    return;
 
-            }
+   }
 
 
 
-            [...attendance].reverse().forEach((record, index) => {
+   [...attendance].reverse().forEach((record, index) => {
 
-                const student = students.find(s => s.nis === record.nis);
+    const student = students.find(s => s.nis === record.nis);
 
-                if(student) {
+    if(student) {
 
-                    const date = new Date(record.timestamp);
+     const date = new Date(record.timestamp);
 
-                    const tr = document.createElement('tr');
+     const tr = document.createElement('tr');
 
-                    tr.className = 'border-b hover:bg-gray-50';
+     tr.className = 'border-b hover:bg-gray-50';
 
-                    tr.innerHTML = `
+     tr.innerHTML = `
 
-                        <td class="py-3 px-4">${index + 1}</td>
+      <td class="py-3 px-4">${index + 1}</td>
 
-                        <td class="py-3 px-4">${student.nis}</td>
+      <td class="py-3 px-4">${student.nis}</td>
 
-                        <td class="py-3 px-4">${student.nama}</td>
+      <td class="py-3 px-4">${student.nama}</td>
 
-                        <td class="py-3 px-4">${student.kelas}</td>
+      <td class="py-3 px-4">${student.kelas}</td>
 
-                        <td class="py-3 px-4">${date.toLocaleDateString('id-ID')}</td>
+      <td class="py-3 px-4">${date.toLocaleDateString('id-ID')}</td>
 
-                        <td class="py-3 px-4">${date.toLocaleTimeString('id-ID')}</td>
+      <td class="py-3 px-4">${date.toLocaleTimeString('id-ID')}</td>
 
-                        <td class="py-3 px-4 ${record.poin > 0 ? 'text-red-600 font-semibold' : 'text-green-600'}">${record.keterangan}</td>
+      <td class="py-3 px-4 ${record.poin > 0 ? 'text-red-600 font-semibold' : 'text-green-600'}">${record.keterangan}</td>
 
-                        <td class="py-3 px-4">${record.poin}</td>
+      <td class="py-3 px-4">${record.poin}</td>
 
-                    `;
+     `;
 
-                    rekapTableBody.appendChild(tr);
+     rekapTableBody.appendChild(tr);
 
-                }
+    }
 
-            });
+   });
 
-        };
+  };
 
 
 
-        // --- View Switching ---
+  // --- View Switching ---
 
-        const switchView = (view) => {
+  const switchView = (view) => {
 
-            viewManajemen.classList.add('hidden');
+   viewManajemen.classList.add('hidden');
 
-            viewScan.classList.add('hidden');
+   viewScan.classList.add('hidden');
 
-            viewRekap.classList.add('hidden');
+   viewRekap.classList.add('hidden');
 
-            tabManajemen.classList.remove('active');
+   tabManajemen.classList.remove('active');
 
-            tabScan.classList.remove('active');
+   tabScan.classList.remove('active');
 
-            tabRekap.classList.remove('active');
+   tabRekap.classList.remove('active');
 
-            stopScanner();
+   stopScanner();
 
 
 
-            if (view === 'manajemen') {
+   if (view === 'manajemen') {
 
-                viewManajemen.classList.remove('hidden');
+    viewManajemen.classList.remove('hidden');
 
-                tabManajemen.classList.add('active');
+    tabManajemen.classList.add('active');
 
-            } else if (view === 'scan') {
+   } else if (view === 'scan') {
 
-                viewScan.classList.remove('hidden');
+    viewScan.classList.remove('hidden');
 
-                tabScan.classList.add('active');
+    tabScan.classList.add('active');
 
-                startScanner();
+    startScanner();
 
-            } else if (view === 'rekap') {
+   } else if (view === 'rekap') {
 
-                viewRekap.classList.remove('hidden');
+    viewRekap.classList.remove('hidden');
 
-                tabRekap.classList.add('active');
+    tabRekap.classList.add('active');
 
-                renderRekap();
+    renderRekap();
 
-            }
+   }
 
-        };
+  };
 
 
 
-        // --- Student Modal Logic ---
+  // --- Student Modal Logic ---
 
-        const openModal = (mode, nis = null) => {
+  const openModal = (mode, nis = null) => {
 
-            studentForm.reset();
+   studentForm.reset();
 
-            if (mode === 'add') {
+   if (mode === 'add') {
 
-                modalTitle.textContent = 'Tambah Siswa Baru';
+    modalTitle.textContent = 'Tambah Siswa Baru';
 
-                modalStudentId.value = '';
+    modalStudentId.value = '';
 
-                nisInput.readOnly = false;
+    nisInput.readOnly = false;
 
-            } else {
+   } else {
 
-                modalTitle.textContent = 'Edit Data Siswa';
+    modalTitle.textContent = 'Edit Data Siswa';
 
-                const student = students.find(s => s.nis === nis);
+    const student = students.find(s => s.nis === nis);
 
-                if (student) {
+    if (student) {
 
-                    modalStudentId.value = student.nis;
+     modalStudentId.value = student.nis;
 
-                    nisInput.value = student.nis;
+     nisInput.value = student.nis;
 
-                    nisInput.readOnly = true;
+     nisInput.readOnly = true;
 
-                    namaInput.value = student.nama;
+     namaInput.value = student.nama;
 
-                    kelasInput.value = student.kelas;
+     kelasInput.value = student.kelas;
 
-                }
+    }
 
-            }
+   }
 
-            studentModal.classList.remove('hidden');
+   studentModal.classList.remove('hidden');
 
-        };
+  };
 
 
 
-        const closeModal = () => {
+  const closeModal = () => {
 
-            studentModal.classList.add('hidden');
+   studentModal.classList.add('hidden');
 
-        };
+  };
 
 
 
-        // --- QR Code Modal Logic ---
+  // --- QR Code Modal Logic ---
 
-        const openQrModal = (nis) => {
+  const openQrModal = (nis) => {
 
-            const student = students.find(s => s.nis === nis);
+   const student = students.find(s => s.nis === nis);
 
-            if (!student) return;
+   if (!student) return;
 
-            qrStudentInfo.textContent = `${student.nama} (${student.nis})`;
+   qrStudentInfo.textContent = `${student.nama} (${student.nis})`;
 
-            qrcodeContainer.innerHTML = '';
+   qrcodeContainer.innerHTML = '';
 
-            try {
+   try {
 
-                const qr = qrcode(0, 'M');
+    const qr = qrcode(0, 'M');
 
-                qr.addData(student.nis);
+    qr.addData(student.nis);
 
-                qr.make();
+    qr.make();
 
-                qrcodeContainer.innerHTML = qr.createImgTag(6, 8);
+    qrcodeContainer.innerHTML = qr.createImgTag(6, 8);
 
-                qrcodeContainer.firstChild.classList.add('mx-auto');
+    qrcodeContainer.firstChild.classList.add('mx-auto');
 
-            } catch (e) {
+   } catch (e) {
 
-                qrcodeContainer.textContent = 'Gagal membuat QR code.';
+    qrcodeContainer.textContent = 'Gagal membuat QR code.';
 
-                console.error(e);
+    console.error(e);
 
-            }
+   }
 
-            qrModal.classList.remove('hidden');
+   qrModal.classList.remove('hidden');
 
-        };
+  };
 
-        const closeQrModal = () => qrModal.classList.add('hidden');
+  const closeQrModal = () => qrModal.classList.add('hidden');
 
 
 
-        // --- CRUD Logic ---
+  // --- CRUD Logic ---
 
-        studentForm.addEventListener('submit', (e) => {
+  studentForm.addEventListener('submit', (e) => {
 
-            e.preventDefault();
+   e.preventDefault();
 
-            const nis = nisInput.value.trim(), nama = namaInput.value.trim(), kelas = kelasInput.value.trim();
+   const nis = nisInput.value.trim(), nama = namaInput.value.trim(), kelas = kelasInput.value.trim();
 
-            const existingNis = modalStudentId.value;
+   const existingNis = modalStudentId.value;
 
-            if (existingNis) {
+   if (existingNis) {
 
-                const studentIndex = students.findIndex(s => s.nis === existingNis);
+    const studentIndex = students.findIndex(s => s.nis === existingNis);
 
-                if (studentIndex > -1) students[studentIndex] = { nis, nama, kelas };
+    if (studentIndex > -1) students[studentIndex] = { nis, nama, kelas };
 
-            } else {
+   } else {
 
-                if (students.some(s => s.nis === nis)) { alert('NIS sudah ada.'); return; }
+    if (students.some(s => s.nis === nis)) { alert('NIS sudah ada.'); return; }
 
-                students.push({ nis, nama, kelas });
+    students.push({ nis, nama, kelas });
 
-            }
+   }
 
-            saveData();
+   saveData();
 
-            renderStudents();
+   renderStudents();
 
-            populateClassFilter();
+   populateClassFilter();
 
-            closeModal();
+   closeModal();
 
-        });
+  });
 
 
 
-        studentTableBody.addEventListener('click', (e) => {
+  studentTableBody.addEventListener('click', (e) => {
 
-            const target = e.target.closest('button');
+   const target = e.target.closest('button');
 
-            if (!target) return;
+   if (!target) return;
 
-            const nis = target.dataset.nis;
+   const nis = target.dataset.nis;
 
-            if (target.classList.contains('btn-edit')) openModal('edit', nis);
+   if (target.classList.contains('btn-edit')) openModal('edit', nis);
 
-            else if (target.classList.contains('btn-delete')) {
+   else if (target.classList.contains('btn-delete')) {
 
-                if (window.confirm(`Yakin ingin menghapus siswa dengan NIS ${nis}?`)) {
+    if (window.confirm(`Yakin ingin menghapus siswa dengan NIS ${nis}?`)) {
 
-                    students = students.filter(s => s.nis !== nis);
+     students = students.filter(s => s.nis !== nis);
 
-                    saveData();
+     saveData();
 
-                    renderStudents();
+     renderStudents();
 
-                    populateClassFilter();
+     populateClassFilter();
 
-                }
+    }
 
-            } else if (target.classList.contains('btn-qr')) openQrModal(nis);
+   } else if (target.classList.contains('btn-qr')) openQrModal(nis);
 
-        });
+  });
 
 
 
-        // --- File Handling ---
+  // --- File Handling ---
 
-        btnDownloadTemplate.addEventListener('click', () => {
+  btnDownloadTemplate.addEventListener('click', () => {
 
-            const templateData = [ { NIS: '1001', Nama_Lengkap: 'Budi Santoso', Kelas: '10A' } ];
+   const templateData = [ { NIS: '1001', Nama_Lengkap: 'Budi Santoso', Kelas: '10A' } ];
 
-            const ws = XLSX.utils.json_to_sheet(templateData);
+   const ws = XLSX.utils.json_to_sheet(templateData);
 
-            const wb = XLSX.utils.book_new();
+   const wb = XLSX.utils.book_new();
 
-            XLSX.utils.book_append_sheet(wb, ws, "Template Siswa");
+   XLSX.utils.book_append_sheet(wb, ws, "Template Siswa");
 
-            XLSX.writeFile(wb, "template_siswa.xlsx");
+   XLSX.writeFile(wb, "template_siswa.xlsx");
 
-        });
+  });
 
 
 
-        uploadInput.addEventListener('change', (e) => {
+  uploadInput.addEventListener('change', (e) => {
 
-            const file = e.target.files[0];
+   const file = e.target.files[0];
 
-            if (!file) return;
+   if (!file) return;
 
-            const reader = new FileReader();
+   const reader = new FileReader();
 
-            reader.onload = (event) => {
+   reader.onload = (event) => {
 
-                const data = new Uint8Array(event.target.result);
+    const data = new Uint8Array(event.target.result);
 
-                const workbook = XLSX.read(data, { type: 'array' });
+    const workbook = XLSX.read(data, { type: 'array' });
 
-                const sheetName = workbook.SheetNames[0];
+    const sheetName = workbook.SheetNames[0];
 
-                const worksheet = workbook.Sheets[sheetName];
+    const worksheet = workbook.Sheets[sheetName];
 
-                const json = XLSX.utils.sheet_to_json(worksheet);
+    const json = XLSX.utils.sheet_to_json(worksheet);
 
-                let importedCount = 0, errorCount = 0;
+    let importedCount = 0, errorCount = 0;
 
-                json.forEach(row => {
+    json.forEach(row => {
 
-                    const nis = String(row.NIS || '').trim();
+     const nis = String(row.NIS || '').trim();
 
-                    const nama = String(row.Nama_Lengkap || '').trim();
+     const nama = String(row.Nama_Lengkap || '').trim();
 
-                    const kelas = String(row.Kelas || '').trim();
+     const kelas = String(row.Kelas || '').trim();
 
-                    if (nis && nama && kelas) {
+     if (nis && nama && kelas) {
 
-                        if (!students.some(s => s.nis === nis)) {
+      if (!students.some(s => s.nis === nis)) {
 
-                            students.push({ nis, nama, kelas });
+       students.push({ nis, nama, kelas });
 
-                            importedCount++;
+       importedCount++;
 
-                        } else { errorCount++; }
+      } else { errorCount++; }
 
-                    } else { errorCount++; }
+     } else { errorCount++; }
 
-                });
+    });
 
-                saveData();
+    saveData();
 
-                renderStudents();
+    renderStudents();
 
-                populateClassFilter();
+    populateClassFilter();
 
-                alert(`Upload selesai. Berhasil: ${importedCount}. Gagal/Duplikat: ${errorCount}.`);
+    alert(`Upload selesai. Berhasil: ${importedCount}. Gagal/Duplikat: ${errorCount}.`);
 
-            };
+   };
 
-            reader.readAsArrayBuffer(file);
+   reader.readAsArrayBuffer(file);
 
-            uploadInput.value = '';
+   uploadInput.value = '';
 
-        });
+  });
 
 
 
-        // --- Scanner Logic ---
+  // --- Scanner Logic ---
 
-        const startScanner = () => {
+  const startScanner = () => {
 
-            if (scanActive) return;
+   if (scanActive) return;
 
-            html5QrCode = new Html5Qrcode("qr-reader");
+   html5QrCode = new Html5Qrcode("qr-reader");
 
-            const qrCodeSuccessCallback = (decodedText, decodedResult) => handleScan(decodedText);
+   const qrCodeSuccessCallback = (decodedText, decodedResult) => handleScan(decodedText);
 
-            const config = { fps: 10, qrbox: { width: 250, height: 250 }, rememberLastUsedCamera: true };
+   const config = { fps: 10, qrbox: { width: 250, height: 250 }, rememberLastUsedCamera: true };
 
-            html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+   html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
 
-                .then(() => { scanActive = true; })
+    .then(() => { scanActive = true; })
 
-                .catch(err => {
+    .catch(err => {
 
-                    console.error("Gagal memulai scanner", err);
+     console.error("Gagal memulai scanner", err);
 
-                    showNotification('Gagal mengakses kamera. Pastikan Anda memberikan izin.', 'error');
+     showNotification('Gagal mengakses kamera. Pastikan Anda memberikan izin.', 'error');
 
-                });
+    });
 
-        };
+  };
 
 
 
-        const stopScanner = () => {
+  const stopScanner = () => {
 
-            if (scanActive && html5QrCode && html5QrCode.isScanning) {
+   if (scanActive && html5QrCode && html5QrCode.isScanning) {
 
-                html5QrCode.stop().then(() => { scanActive = false; }).catch(err => {});
+    html5QrCode.stop().then(() => { scanActive = false; }).catch(err => {});
 
-            }
+   }
 
-        };
+  };
 
 
 
-        let lastScannedNis = null;
+  let lastScannedNis = null;
 
-        let lastScanTime = 0;
+  let lastScanTime = 0;
 
 
 
-        const handleScan = (nis) => {
+  const handleScan = (nis) => {
 
-            const now = Date.now();
+   const now = Date.now();
 
-            if (nis === lastScannedNis && (now - lastScanTime < 3000)) {
+   if (nis === lastScannedNis && (now - lastScanTime < 3000)) {
 
-                return; // Cooldown for the same NIS
+    return; // Cooldown for the same NIS
 
-            }
+   }
 
-            lastScannedNis = nis;
+   lastScannedNis = nis;
 
-            lastScanTime = now;
+   lastScanTime = now;
 
 
 
-            const student = students.find(s => s.nis === nis);
+   const student = students.find(s => s.nis === nis);
 
-            if (!student) {
+   if (!student) {
 
-                showNotification('GAGAL: Data siswa tidak ditemukan.', 'error');
+    showNotification('GAGAL: Data siswa tidak ditemukan.', 'error');
 
-                playSound('error');
+    playSound('error');
 
-                return;
+    return;
 
-            }
+   }
 
 
 
-            const today = new Date().toDateString();
+   const today = new Date().toDateString();
 
-            const alreadyAttended = attendance.some(record => record.nis === nis && new Date(record.timestamp).toDateString() === today);
+   const alreadyAttended = attendance.some(record => record.nis === nis && new Date(record.timestamp).toDateString() === today);
 
-            if (alreadyAttended) {
+   if (alreadyAttended) {
 
-                showNotification(`SUDAH ABSEN: ${student.nama}`, 'warning');
+    showNotification(`SUDAH ABSEN: ${student.nama}`, 'warning');
 
-                playSound('warning');
+    playSound('warning');
 
-                return;
+    return;
 
-            }
+   }
 
 
 
-            const scanTime = new Date();
+   const scanTime = new Date();
 
-            const jam = scanTime.getHours();
+   const jam = scanTime.getHours();
 
-            const menit = scanTime.getMinutes();
+   const menit = scanTime.getMinutes();
 
-            
+   
 
-            const batasPagi = 5; // 05:00
+   const batasPagi = 5; // 05:00
 
-            const batasAkhirJam = 6; // 06:30
+   const batasAkhirJam = 6; // 06:30
 
-            const batasAkhirMenit = 30;
+   const batasAkhirMenit = 30;
 
 
 
-            let keterangan = '';
+   let keterangan = '';
 
-            let poin = 0;
+   let poin = 0;
 
-            let notifType = 'success';
+   let notifType = 'success';
 
 
 
-            if (jam < batasPagi) {
+   if (jam < batasPagi) {
 
-                showNotification('Absensi belum dibuka.', 'warning');
+    showNotification('Absensi belum dibuka.', 'warning');
 
-                playSound('warning');
+    playSound('warning');
 
-                return;
+    return;
 
-            }
+   }
 
 
 
-            const onTime = (jam < batasAkhirJam) || (jam === batasAkhirJam && menit <= batasAkhirMenit);
+   const onTime = (jam < batasAkhirJam) || (jam === batasAkhirJam && menit <= batasAkhirMenit);
 
-            if (onTime) {
+   if (onTime) {
 
-                keterangan = 'Hadir Tepat Waktu';
+    keterangan = 'Hadir Tepat Waktu';
 
-                poin = 0;
+    poin = 0;
 
-            } else {
+   } else {
 
-                const batasWaktu = new Date(scanTime);
+    const batasWaktu = new Date(scanTime);
 
-                batasWaktu.setHours(batasAkhirJam, batasAkhirMenit, 0, 0);
+    batasWaktu.setHours(batasAkhirJam, batasAkhirMenit, 0, 0);
 
-                const menitTerlambat = Math.round((scanTime - batasWaktu) / 60000);
+    const menitTerlambat = Math.round((scanTime - batasWaktu) / 60000);
 
-                keterangan = `Siswa terlambat ${menitTerlambat} menit`;
+    keterangan = `Siswa terlambat ${menitTerlambat} menit`;
 
-                poin = 5;
+    poin = 5;
 
-                notifType = 'warning';
+    notifType = 'warning';
 
-            }
+   }
 
 
 
-            attendance.push({ nis, timestamp: scanTime.toISOString(), keterangan, poin });
+   attendance.push({ nis, timestamp: scanTime.toISOString(), keterangan, poin });
 
-            saveData();
+   saveData();
 
-            renderTodaysAttendance();
+   renderTodaysAttendance();
 
-            showNotification(`BERHASIL: ${student.nama} (${keterangan})`, notifType);
+   showNotification(`BERHASIL: ${student.nama} (${keterangan})`, notifType);
 
-            playSound(notifType);
+   playSound(notifType);
 
-        };
+  };
 
 
 
-        const showNotification = (message, type) => {
+  const showNotification = (message, type) => {
 
-            scanNotification.textContent = message;
+   scanNotification.textContent = message;
 
-            let classNames;
+   let classNames;
 
-            switch (type) {
+   switch (type) {
 
-                case 'success': classNames = 'bg-green-200 text-green-800'; break;
+    case 'success': classNames = 'bg-green-200 text-green-800'; break;
 
-                case 'error': classNames = 'bg-red-200 text-red-800'; break;
+    case 'error': classNames = 'bg-red-200 text-red-800'; break;
 
-                case 'warning': classNames = 'bg-yellow-200 text-yellow-800'; break;
+    case 'warning': classNames = 'bg-yellow-200 text-yellow-800'; break;
 
-            }
+   }
 
-            scanNotification.className = `mt-4 text-center font-bold text-xl p-4 rounded-lg ${classNames}`;
+   scanNotification.className = `mt-4 text-center font-bold text-xl p-4 rounded-lg ${classNames}`;
 
-            scanNotification.classList.remove('hidden');
+   scanNotification.classList.remove('hidden');
 
-            setTimeout(() => scanNotification.classList.add('hidden'), 3000);
+   setTimeout(() => scanNotification.classList.add('hidden'), 3000);
 
-        };
+  };
 
 
 
-        // --- Event Listeners ---
+  // --- Event Listeners ---
 
-        tabManajemen.addEventListener('click', () => switchView('manajemen'));
+  tabManajemen.addEventListener('click', () => switchView('manajemen'));
 
-        tabScan.addEventListener('click', () => switchView('scan'));
+  tabScan.addEventListener('click', () => switchView('scan'));
 
-        tabRekap.addEventListener('click', () => switchView('rekap'));
+  tabRekap.addEventListener('click', () => switchView('rekap'));
 
-        btnAddStudent.addEventListener('click', () => openModal('add'));
+  btnAddStudent.addEventListener('click', () => openModal('add'));
 
-        btnCancelModal.addEventListener('click', closeModal);
+  btnCancelModal.addEventListener('click', closeModal);
 
-        searchInput.addEventListener('input', renderStudents);
+  searchInput.addEventListener('input', renderStudents);
 
-        filterKelas.addEventListener('change', renderStudents);
+  filterKelas.addEventListener('change', renderStudents);
 
-        btnCloseQrModal.addEventListener('click', closeQrModal);
+  btnCloseQrModal.addEventListener('click', closeQrModal);
 
-        btnPrintQr.addEventListener('click', () => window.print());
+  btnPrintQr.addEventListener('click', () => window.print());
 
-        
+  
 
-        document.querySelector('thead').addEventListener('click', (e) => {
+  document.querySelector('thead').addEventListener('click', (e) => {
 
-            const header = e.target.closest('th');
+   const header = e.target.closest('th');
 
-            if (header && header.dataset.sort) {
+   if (header && header.dataset.sort) {
 
-                const key = header.dataset.sort;
+    const key = header.dataset.sort;
 
-                sortConfig.direction = (sortConfig.key === key && sortConfig.direction === 'ascending') ? 'descending' : 'ascending';
+    sortConfig.direction = (sortConfig.key === key && sortConfig.direction === 'ascending') ? 'descending' : 'ascending';
 
-                sortConfig.key = key;
+    sortConfig.key = key;
 
-                renderStudents();
+    renderStudents();
 
-            }
+   }
 
-        });
+  });
 
 
 
-        // --- Initial Load ---
+  // --- Initial Load ---
 
-        loadData();
+  loadData();
 
-        populateClassFilter();
+  populateClassFilter();
 
-        renderStudents();
+  renderStudents();
 
-        renderTodaysAttendance();
+  renderTodaysAttendance();
 
-        switchView('manajemen');
+  switchView('manajemen');
 
-    });
+ });
 
-    </script>
+ </script>
 
 </body>
 
